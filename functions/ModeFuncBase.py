@@ -23,7 +23,7 @@ def createDictWindow():
 	layoutBackGround = [[sg.Text()]]
 	layoutStandby = make_fullimage_layout("png/standby01.png", "STANDBY")
 	layoutSelect_Game = make_4choice_layout("png/select01.png", ["", "くらわんか船1", "くらわんか船2", ""])
-	layoutGo_Tutorial = make_fullimage_layout("png/go_to_tutorial.png", "GO_TO_TUTORIAL")
+	layoutGo_Tutorial = make_fullimage_layout("png/ending.png", "GO_TUTORIAL")
 	layoutCard_Error = make_fullimage_layout("png/card_alert.png", "CARD_ERROR")
 
 
@@ -45,6 +45,14 @@ def getDefaultAreaDefinition():
 
     return listArea
 
+# # TITLEモード処理 ======================================================
+# def titleModeProc(dictArgument):
+# 	event = dictArgument["Event"]
+
+# 	if event == "TITLE":
+# 		# カードのデータからゲームの状態を設定
+# 		SetGame_FromCard(dictArgument)
+
 
 # STANDBYモード処理 ======================================================
 def StandbyModeProc(dictArgument):
@@ -65,10 +73,10 @@ def select_game_ModeProc(dictArgument):
 	cState = dictArgument["State"]
 
 	if event == "くらわんか船1":
-		sStartTime = cState.updateState("KURA1_Q")
+		sStartTime = cState.updateState("KURAWANKA1_Q")
 		dictArgument["Start time"] = sStartTime
 	elif event == "くらわんか船2":
-		sStartTime = cState.updateState("KURA2_Q")
+		sStartTime = cState.updateState("KURAWANKA2_Q")
 		dictArgument["Start time"] = sStartTime
 
 

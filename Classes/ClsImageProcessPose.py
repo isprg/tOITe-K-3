@@ -13,7 +13,7 @@ class ClsImageProcessPose(ClsImageProcess):
 		self.ratioROI = 0.5
 		self.flag = False  # ポーズができたかのフラグ
 		self.flag_onstart = 0  # ポーズができた時の時間を格納する場所
-		self.sJudgeMargin = 20
+		self.sJudgeMargin = 5
 		self.mp_pose = mp.solutions.pose
 		#self.pose_subject = self.mp_pose.Pose(
 		#	static_image_mode=True,
@@ -51,16 +51,8 @@ class ClsImageProcessPose(ClsImageProcess):
 		#vPoints = [(landmark.x * imCorrect.shape[1], landmark.y * imCorrect.shape[0])
 		#			for landmark in vLandmark]
 		#self.correctAngles = makeListOfAngles(vLandmark, vPoints)
-		self.correctAngles = list(range(8))
-		self.correctAngles[0] = 143.5885
-		self.correctAngles[1] = 151.5676
-		self.correctAngles[2] = 176.0291
-		self.correctAngles[3] = 183.4004
-		self.correctAngles[4] = 141.0687
-		self.correctAngles[5] = 161.5590
-		self.correctAngles[6] = 185.0458
-		self.correctAngles[7] = 170.7074
-		print(self.correctAngles)
+		self.correctAngle = 20
+		print(self.correctAngle)
 
 	def defineROI(self, img):
 		width = int(img.shape[1] * self.ratioROI)
@@ -105,7 +97,7 @@ class ClsImageProcessPose(ClsImageProcess):
 			vPoints = [(int(landmark.x*imROI.shape[1]+self.leftPosROI), int(landmark.y*imROI.shape[0]))
 						for landmark in results.pose_landmarks.landmark]
 			pose_flag = judge_pose(
-				results.pose_landmarks.landmark, vPoints, self.correctAngles, self.sJudgeMargin)
+				results.pose_landmarks.landmark, vPoints, self.correctAngle, self.sJudgeMargin)
 			self.imSensor = draw_landamrks(
 				self.imSensor, vPoints, 2, 3, (0, 255, 0), (0, 0, 255))
 
@@ -122,6 +114,7 @@ class ClsImageProcessPose(ClsImageProcess):
 			# ポーズ判定で正解して３秒以上経過したらクラスのフラグをFalseにし、processの返り値をTrueにする
 			if time.time() - self.flag_onstart >= 2:
 				self.flag = False
+				print("正解")
 				return True
 		else:
 			self.window.setOverlayImage(self.imOverlayOrig_inst, self.imOverlayMask_inst)

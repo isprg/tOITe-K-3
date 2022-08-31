@@ -6,13 +6,12 @@ import yaml
 import os
 
 from functions.ModeFuncBase import *
-from functions.ModeFuncLabo import *
-from functions.ModeFuncRoom import *
+from functions.ModeFuncKura2 import *
 from functions.ModeFuncClear import *
 from functions.ModeFuncEnd import *
 from functions.ModeFuncSurvey import *
 from functions.CardFunc import *
-from functions.common import getListFlags
+from functions.common import getDictFlag
 
 from Classes.ClsCtrlStateAndWindow import ClsCtrlStateAndWindow
 
@@ -61,8 +60,7 @@ def setEnvironment():
 # モード別設定 =============================================================
 def setModeFuncsAndLayouts(blDebug):
 	dictWindow = createDictWindow()
-	dictWindow = updateDictWindow_Labo(dictWindow)
-	dictWindow = updateDictWindow_Room(dictWindow)
+	dictWindow = updateDictWindow_Kura2(dictWindow)
 	dictWindow = updateDictWindow_Clear(dictWindow)
 	dictWindow = updateDictWindow_End(dictWindow)
 	dictWindow = updateDictWindow_Survey(dictWindow)
@@ -73,16 +71,15 @@ def setModeFuncsAndLayouts(blDebug):
 			if window != "None":
 				window.set_cursor("none")
 
-	cState = ClsCtrlStateAndWindow("WAIT", "BACKGROUND", dictWindow)
+	cState = ClsCtrlStateAndWindow("STANDBY", "BACKGROUND", dictWindow)
 
 	dictProc = createDictProc()
-	dictProc = updateDictProc_Labo(dictProc)
-	dictProc = updateDictProc_Room(dictProc)
+	dictProc = updateDictProc_Kura2(dictProc)
 	dictProc = updateDictProc_Clear(dictProc)
 	dictProc = updateDictProc_End(dictProc)
 	dictProc = updateDictProc_Survey(dictProc)
 
-	listFlag = getListFlags()
+	listFlag = getDictFlag()
 
 	return cState, dictProc, listFlag
 
@@ -139,11 +136,6 @@ def mainThread():
 				break
 
 		dictProc[currentState](dictArgument)
-
-		print(f"dictArgument: {dictArgument}\n")
-		print(f"dictProc: {dictProc}\n")
-		print(f"listFlag: {listFlag}\n")
-		break
 
 	cCtrlCard.Finalize()
 	proc.Finalize()

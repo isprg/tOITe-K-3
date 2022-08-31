@@ -1,5 +1,5 @@
 from functions.setGUI import setGUI
-from functions.common import Record_to_CSV
+# from functions.common import Record_to_CSV
 from functions.DesignLayout import make_4choice_layout
 
 
@@ -50,7 +50,7 @@ def procSurvey(dictArgument):
 		if sNumSurvey == 5:
 			sStartTime = cState.updateState("END_B")
 			dictArgument["Start time"] = sStartTime
-			Record_to_CSV(dictArgument)  # アンケート結果をcsvファイルに保存
+			# Record_to_CSV(dictArgument)  # アンケート結果をcsvファイルに保存
 		else:
 			sStartTime = cState.updateState("SURVEY" + str(sNumSurvey + 1))
 			dictArgument["Start time"] = sStartTime

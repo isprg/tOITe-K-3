@@ -4,7 +4,7 @@ import cv2
 from functions.setGUI import setGUI
 from functions.common import PlaySound, CheckTappedArea, CheckComplete
 from functions.DesignLayout import make_fullimage_layout
-from ModeFuncBase import getDefaultAreaDefinition
+from functions.ModeFuncBase import getDefaultAreaDefinition
 
 
 def updateDictProc_Kura2(dictProc):
@@ -19,16 +19,16 @@ def updateDictProc_Kura2(dictProc):
 
 # レイアウト設定・辞書割り当て =============================================
 def updateDictWindow_Kura2(dictWindow):
-	layoutKura2_Q = make_fullimage_layout('png/kura1_q.png',"KURA2_Q")
-	layoutKura2_Correct = make_fullimage_layout('png/kura2_a.png',"KURA2_CORRECT")
-	layoutLabo_Clear = make_fullimage_layout('png/kura2_i.png',)
+	layoutKura2_Q = make_fullimage_layout('png/lab_q.png',"KURA2_Q")
+	layoutKura2_Correct = make_fullimage_layout('png/lab_a.png',"KURA2_CORRECT")
+	layoutKura2_Clear = make_fullimage_layout('png/lab_i.png', "KURA2_CLEAR")
 
 	dictLayout = {
 		"KURA2_Q"			: layoutKura2_Q,
 		"KURA2_MOVIE_PROC"	: 'None',
 		"KURA2_POSE_PROC"	: 'None',
 		"KURA2_CORRECT"      : layoutKura2_Correct,
-		"LABO_CLEAR"        : layoutLabo_Clear
+		"KURA2_CLEAR"        : layoutKura2_Clear
 	}
 	dictWindow_this = setGUI(dictLayout)
 
@@ -38,7 +38,7 @@ def procKura2_Q(dictArgument):
 	event = dictArgument["Event"]
 	cState = dictArgument["State"]
 
-	if event == "次へ":
+	if event == "KURA2_Q":
 		sStartTime = cState.updateState("KURA2_POSE_PROC")
 		dictArgument["Start time"] = sStartTime
 
@@ -92,19 +92,29 @@ def procKura2_correct(dictArgument):
 	# 	cCtrlCard.write_result("clear_game", "T")  # ゲームクリア済みであることを記録
 
 	if event == "KURA2_CORRECT":
-		cState.dictWindow["SELECT_GAME"]["くらわんか船2"].update(disabled=True)
-		sStartTime = cState.updateState("KURA2_CLEAR")
-		dictArgument["Start time"] = sStartTime
+		vPosition = pyautogui.position()
+		listArea = getDefaultAreaDefinition()
+		sTappedArea = CheckTappedArea(vPosition, listArea)
+
+		if sTappedArea == 0:
+			cState.dictWindow["SELECT_GAME"]["くらわんか船2"].update(disabled=True)
+			sStartTime = cState.updateState("KURA2_CLEAR")
+			dictArgument["Start time"] = sStartTime
 
 def procKura2_clear(dictArgument):
 	event = dictArgument["Event"]
 	cState = dictArgument["State"]
 	cCtrlCard = dictArgument["CtrlCard"]
 
-	if event == "次へ":
-		sStartTime = cState.updateState("SELECT_GAME")
+	if event == "KURA2_CLEAR":
+		vPosition = pyautogui.position()
+		listArea = getDefaultAreaDefinition()
+		sTappedArea = CheckTappedArea(vPosition, listArea)
 
-		dictArgument["Start time"] = sStartTime
+		if sTappedArea == 0:
+			sStartTime = cState.updateState("SELECT_GAME")
 
-		# # ラボをクリアしたのでプレイできないように設定
-		# cState.dictWindow["SELECT_GAME"]["ラボ"].update(disabled=True)
+			dictArgument["Start time"] = sStartTime
+
+			# # ラボをクリアしたのでプレイできないように設定
+			cState.dictWindow["SELECT_GAME"]["くらわんか船2"].update(disabled=True)

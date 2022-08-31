@@ -1,5 +1,5 @@
 from functions.setGUI import setGUI
-from functions.common import Record_to_CSV
+# from functions.common import Record_to_CSV
 from functions.DesignLayout import make_4choice_layout
 
 
@@ -22,7 +22,7 @@ def updateDictWindow_Clear(dictWindow):
 		"CLEAR2"			: layoutClear2,
 	}
 	dictWindow_this = setGUI(dictLayout)
-	
+
 	return dict(dictWindow, **dictWindow_this)
 
 

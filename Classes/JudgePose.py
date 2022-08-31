@@ -25,7 +25,7 @@ def makeListOfAngles(vLandmarks, vPoints):
 
 def measureAngleWrap(vLandmarks, vPoints, vPointNumbers):
 	visibilityThresh = 0.3
-	if (vLandmarks[vPointNumbers[0]].visibility > visibilityThresh 
+	if (vLandmarks[vPointNumbers[0]].visibility > visibilityThresh
 	and vLandmarks[vPointNumbers[1]].visibility > visibilityThresh
 	and vLandmarks[vPointNumbers[2]].visibility > visibilityThresh):
 		return measureAngle(vPoints, vPointNumbers)
@@ -38,13 +38,13 @@ def measureAngle(vPoints, vPointNumbers):
 	vPostAround1 = np.array(vPoints[vPointNumbers[1]])
 	vPostAround2 = np.array(vPoints[vPointNumbers[2]])
 
-	if (np.array_equal(vPostPivot, vPostAround1) 
-	or np.array_equal(vPostAround1, vPostAround2) 
+	if (np.array_equal(vPostPivot, vPostAround1)
+	or np.array_equal(vPostAround1, vPostAround2)
 	or np.array_equal(vPostAround2, vPostPivot)):
 		return -1
 
-	if ((vPostPivot[0] >= 0 and vPostPivot[1] >= 0) 
-	and (vPostAround1[0] >= 0 and vPostAround1[1] >= 0) 
+	if ((vPostPivot[0] >= 0 and vPostPivot[1] >= 0)
+	and (vPostAround1[0] >= 0 and vPostAround1[1] >= 0)
 	and (vPostAround2[0] >= 0 and vPostAround2[1] >= 0)):
 		pass
 	else:
@@ -102,20 +102,45 @@ def draw_landamrks(img, points, line_pic, radius, line_color, circle_color):
 
 	return img_
 
-def judge_pose(vLandmarks, vPoints, correctAngles, sJudgeMargin):
-	currentAngles = makeListOfAngles(vLandmarks, vPoints)
+def judge_pose(vLandmarks, vPoints, correctAngle, sJudgeMargin):
+	# currentAngles = makeListOfAngles(vLandmarks, vPoints)
 	#print(currentAngles[0],currentAngles[1],currentAngles[4],currentAngles[5])
 	#print(vLandmarks[26],vLandmarks[25])
+	print(vPoints)
+	print(len(vPoints))
 
-	flag = True
-	for i in range(0, 8):
-		if i in (2, 3, 6, 7):
-			continue
-		if correctAngles[i] - sJudgeMargin  <= currentAngles[i] \
-		and currentAngles[i] <= correctAngles[i] + sJudgeMargin:
-			pass
-		else:
-			flag = False
+	flag = False
+	# for i in range(0, 8):
+	# 	if i in (2, 3, 6, 7):
+	# 		continue
+	# 	if correctAngles[i] - sJudgeMargin  <= currentAngles[i] \
+	# 	and currentAngles[i] <= correctAngles[i] + sJudgeMargin:
+	# 		pass
+	# 	else:
+	# 		flag = False
+
+	# 肩の中心x座標
+	shoulder_mid_x = (vPoints[12][0]+vPoints[11][0])/2
+	# y座標
+	shoulder_mid_y = (vPoints[12][1]+vPoints[11][1])/2
+	shoulder_mid_point = (shoulder_mid_x, shoulder_mid_y)
+
+	# 腰の中心x座標
+	hip_mid_x = (vPoints[24][0]+vPoints[23][0])/2
+	# y座標
+	hip_mid_y = (vPoints[24][1]+vPoints[23][1])/2
+	hip_mid_point = (hip_mid_x, hip_mid_y)
+
+	# xは腰の位置,yは肩の位置の座標
+	hipx_shouldery = (hip_mid_x, shoulder_mid_y)
+
+	this_angle = measureAngle([hip_mid_point, hipx_shouldery, shoulder_mid_point], [0, 1, 2])
+	if this_angle >= 180 :
+		this_angle = 360 - this_angle
+	if correctAngle - sJudgeMargin <= this_angle and this_angle <= correctAngle + sJudgeMargin:
+		flag = True
+
+
 
 	#if vLandmarks[26].y + 0.06 > vLandmarks[25].y:
 	#	flag = False

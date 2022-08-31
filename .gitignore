@@ -2,3 +2,4 @@ png/
 sound/
 .venv/
 *.bak
+pose_test.py
