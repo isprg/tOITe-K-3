@@ -96,8 +96,9 @@ def card_error_ModeProc(dictArgument):
 
 		sStartTime = cState.updateState(ReturnState)
 		dictArgument["Return state"] = None
-		sStartTime = cState.updateState("STANDBY")
+		# sStartTime = cState.updateState("STANDBY")
 		dictArgument["Start time"] = sStartTime
+		# Reset_Game(dictArgument)
 
 	elif identical is False or time.time() - dictArgument["Start time"] > 10:
 		Reset_Game(dictArgument)
