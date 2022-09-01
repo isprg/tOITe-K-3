@@ -19,6 +19,10 @@ def SetGame_FromCard(dictArgument):
 
 		dictArgument["Start time"] = sStartTime
 
+	elif dictSaveData["tutorial"] != "T":
+		sStartTime = cState.updateState("GO_TURORIAL")
+		dictArgument["Start time"] = sStartTime
+
 	# チュートリアルをクリアしている場合
 	elif dictSaveData is not None and dictSaveData["tutorial"] == "T":
 		print("already clear tutorial")
@@ -32,9 +36,6 @@ def SetGame_FromCard(dictArgument):
 		# ポーズ推定をすべてクリアしている場合
 		if dictSaveData["pose"] == "T":
 			cState.dictWindow["SELECT_GAME"]["くらわんか船2"].update(disabled=True)
-	else:
-		sStartTime = cState.updateState("GO_TUTORIAL")
-		dictArgument["Start time"] = sStartTime
 
 
 # カードの状態をチェック

@@ -45,15 +45,6 @@ def getDefaultAreaDefinition():
 
     return listArea
 
-# # TITLEモード処理 ======================================================
-# def titleModeProc(dictArgument):
-# 	event = dictArgument["Event"]
-
-# 	if event == "TITLE":
-# 		# カードのデータからゲームの状態を設定
-# 		SetGame_FromCard(dictArgument)
-
-
 # STANDBYモード処理 ======================================================
 def StandbyModeProc(dictArgument):
 	cCtrlCard = dictArgument["CtrlCard"]
@@ -105,7 +96,7 @@ def card_error_ModeProc(dictArgument):
 		Reset_Game(dictArgument)
 
 
-# go_to_tutorialモード処理 ======================================================
+# go_tutorialモード処理 ======================================================
 def go_tutorial_ModeProc(dictArgument):
     if time.time() - dictArgument["Start time"] > 20:
         Reset_Game(dictArgument)
