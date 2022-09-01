@@ -32,12 +32,9 @@ def SetGame_FromCard(dictArgument):
 		# ポーズ推定をすべてクリアしている場合
 		if dictSaveData["pose"] == "T":
 			cState.dictWindow["SELECT_GAME"]["くらわんか船2"].update(disabled=True)
-	# else:
-	# 	# カードを初期化
-	# 	print("InitCard")
-	# 	cCtrlCard.initCard()
-	# 	sStartTime = cState.updateState("GO_TUTORIAL")
-	# 	dictArgument["Start time"] = sStartTime
+	else:
+		sStartTime = cState.updateState("GO_TUTORIAL")
+		dictArgument["Start time"] = sStartTime
 
 
 # カードの状態をチェック

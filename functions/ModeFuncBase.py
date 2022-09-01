@@ -96,6 +96,7 @@ def card_error_ModeProc(dictArgument):
 
 		sStartTime = cState.updateState(ReturnState)
 		dictArgument["Return state"] = None
+		sStartTime = cState.updateState("STANDBY")
 		dictArgument["Start time"] = sStartTime
 
 	elif identical is False or time.time() - dictArgument["Start time"] > 10:
