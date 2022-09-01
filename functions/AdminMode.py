@@ -2,8 +2,7 @@ import yaml
 
 from Classes.ClsCardIF import ClsCardIF
 from Classes.ClsCtrlCard import ClsCtrlCard
-from functions.AdminModeWindow import MakeEditWindow
-from functions.common import Check_Clear, getListFlags
+from functions.common import CheckComplete, getDictFlag
 from functions.AdminModeWindow import *
 
 
@@ -59,9 +58,9 @@ def Register_Admin_Card(Activate_CardID):
 
 # カード編集 =============================================
 def Edit_Card():
-	winSetCard, winEdit = MakeEditWindow()
-	listFlags = getListFlags()
-	cCtrlCard = ClsCtrlCard(listFlags)
+	dictFlag = getDictFlag()
+	winSetCard, winEdit = MakeEditWindow(dictFlag)
+	cCtrlCard = ClsCtrlCard(dictFlag)
 
 	# 初期画面を設定
 	winEdit.hide()
@@ -91,15 +90,15 @@ def Edit_Card():
 		elif event == "write":
 			if cCtrlCard.check_exist() and cCtrlCard.initCard():
 				for key, val in values.items():
-					if key in listFlags and val is True:
+					if key in dictFlag and val is True:
 						cCtrlCard.write_result(key, "T")
 
 				# ゲームクリア状態になった場合，記録を追加
-				bClear = Check_Clear(cCtrlCard)
+				bClear = CheckComplete(cCtrlCard)
 				if bClear:
-					cCtrlCard.write_result("clear_game", "T")
+					cCtrlCard.write_result("complete", "T")
 				else:
-					cCtrlCard.write_result("clear_game", "0")
+					cCtrlCard.write_result("complete", "0")
 			else:
 				print("failed to write")
 

@@ -98,7 +98,7 @@ def card_error_ModeProc(dictArgument):
 		dictArgument["Return state"] = None
 		dictArgument["Start time"] = sStartTime
 
-	elif identical is False or time.time() - dictArgument["Start time"] > 20:
+	elif identical is False or time.time() - dictArgument["Start time"] > 10:
 		Reset_Game(dictArgument)
 
 

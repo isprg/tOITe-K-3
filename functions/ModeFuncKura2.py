@@ -63,16 +63,7 @@ def procKura2_ImageProc(dictArgument):
 	cCtrlCard = dictArgument["CtrlCard"]
 	proc = dictArgument["ImageProc"]
 
-	# if event == "KURA2_POSE_PROC":
-	# vPosition = pyautogui.position()
-	# listArea = getDefaultAreaDefinition()
-	# sTappedArea = CheckTappedArea(vPosition, listArea)
-
-	# proc.createWindows()
-
-	# if sTappedArea == 0:
-		# isFound = proc.execute()
-		# cv2.waitKey(1)
+	proc.defineCorrectPose("")
 	proc.createWindows()
 	isFound = proc.execute()
 	cv2.waitKey(1)

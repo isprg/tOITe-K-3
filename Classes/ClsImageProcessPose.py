@@ -72,7 +72,7 @@ class ClsImageProcessPose(ClsImageProcess):
 		#	min_tracking_confidence=0.5)
 
 	def process(self):
-		self.defineCorrectPose("")
+		# self.defineCorrectPose("")
 		if self.isROIdefined == False:
 			self.defineROI(self.imSensor)
 		imROI = self.imSensor[:, self.leftPosROI:self.rightPosROI]
