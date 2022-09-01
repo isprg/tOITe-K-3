@@ -10,7 +10,7 @@ from functions.DesignLayout import *
 # 処理の辞書割り当て ======================================================
 def createDictProc():
 	dictProc = {
-		"STANDBY"				: StandbyModeProc,
+		"STANDBY"				: standbyModeProc,
 		"SELECT_GAME"		: select_game_ModeProc,
 		"CARD_ERROR"		: card_error_ModeProc,
 		"GO_TUTORIAL"	: go_tutorial_ModeProc,
@@ -46,7 +46,7 @@ def getDefaultAreaDefinition():
     return listArea
 
 # STANDBYモード処理 ======================================================
-def StandbyModeProc(dictArgument):
+def standbyModeProc(dictArgument):
 	cCtrlCard = dictArgument["CtrlCard"]
 	cState = dictArgument["State"]
 
@@ -83,8 +83,8 @@ def card_error_ModeProc(dictArgument):
 	if exist is True and identical is True:
 		ReturnState, ImageProc_Flag = dictArgument["Return state"]
 
-		if ImageProc_Flag:
-			proc.createWindows()
+		# if ImageProc_Flag:
+		# 	proc.createWindows()
 
 		sStartTime = cState.updateState(ReturnState)
 		dictArgument["Return state"] = None

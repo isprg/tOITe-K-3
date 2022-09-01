@@ -41,7 +41,7 @@ def setEnvironment():
 	sMonitorWidth = 1024
 	sMonitorHeight = 600
 	tplWindowName = ("full",)
-	sFlipMode = 1
+	sFlipMode = 2
 
 	proc = ClsImageProcessPose(
 		strPlatform,
@@ -88,27 +88,34 @@ def setModeFuncsAndLayouts(blDebug):
 def mainThread():
 	blDebug = True
 	proc = setEnvironment()
-	cState, dictProc, listFlag = setModeFuncsAndLayouts(blDebug)
-	cCtrlCard = ClsCtrlCard(listFlag)
+	cState, dictProc, dictFlag = setModeFuncsAndLayouts(blDebug)
+	cCtrlCard = ClsCtrlCard(dictFlag)
+
+	listFlags = list(dictFlag.keys())
+	print(listFlags[0])
 
 	# 管理者カードの一覧を取得
 	with open("files/Admin_CardID_list.yaml", "r") as f:
 		card_ID_list = yaml.safe_load(f)["card_ID"]
 
-	dictArgument = {
-		"State": cState,
-		"CtrlCard": cCtrlCard,
-		"ImageProc": proc,
-		"Event": None,
-		"Values": None,
-		"Frame": 0,
-		"Start time": 0,
-		"Return state": None,  # カードエラーからの復帰位置
-		"Option": 0,
-	}
+		dictArgument = {
+			"State"			: cState,
+			"CtrlCard"		: cCtrlCard,
+			"ImageProc"		: proc,
+			"Event"			: None,
+			"Values"		: None,
+			"Frame"			: 0,
+			"Start time"	: 0,
+			"Return state"	: None,  # カードエラーからの復帰位置
+			"Option"		: 0,
+			"Complete"		: 0,
+		}
 
 	# 無限ループ ----------------------------------------
 	while True:
+		if dictArgument["Complete"] == 1:
+			break
+
 		# フレームを記録
 		dictArgument["Frame"] = (dictArgument["Frame"] + 1) % 1000
 
@@ -121,10 +128,13 @@ def mainThread():
 			dictArgument["Event"] = event
 			dictArgument["Values"] = values
 
+			if event != "-timeout-":
+				print(event)
+
 			if blDebug == False:
 				pyautogui.moveTo(1, 1)
 
-		if "CARD_ERROR" not in currentState and currentState != "WAIT":
+		if currentState != "CARD_ERROR" and currentState != "STANDBY":
 			# カードの状態をチェック
 			currentState = CheckCard(dictArgument)  # カードの存在と同一性をチェック
 			admin_mode_flag, Admin_CardID = AdminFlag_fromCard(
