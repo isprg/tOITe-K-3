@@ -158,7 +158,10 @@ def mainThread():
 if __name__ == "__main__":
 	while True:
 		Admin_CardID = mainThread()
-		# admin_operation = AdminMode(Admin_CardID)
+		#adminCommand = AdminMode(Admin_CardID)
 
-		# if admin_operation == "end":
-		# 	break
+		if os.name == 'nt':
+			adminCommand = "end"
+
+		if adminCommand == "end":
+			break
