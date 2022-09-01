@@ -7,9 +7,9 @@ import os
 
 from functions.ModeFuncBase import *
 from functions.ModeFuncKura2 import *
-from functions.ModeFuncClear import *
-from functions.ModeFuncEnd import *
-from functions.ModeFuncSurvey import *
+# from functions.ModeFuncClear import *
+# from functions.ModeFuncEnd import *
+# from functions.ModeFuncSurvey import *
 from functions.CardFunc import *
 from functions.common import getDictFlag
 
@@ -61,9 +61,9 @@ def setEnvironment():
 def setModeFuncsAndLayouts(blDebug):
 	dictWindow = createDictWindow()
 	dictWindow = updateDictWindow_Kura2(dictWindow)
-	dictWindow = updateDictWindow_Clear(dictWindow)
-	dictWindow = updateDictWindow_End(dictWindow)
-	dictWindow = updateDictWindow_Survey(dictWindow)
+	# dictWindow = updateDictWindow_Clear(dictWindow)
+	# dictWindow = updateDictWindow_End(dictWindow)
+	# dictWindow = updateDictWindow_Survey(dictWindow)
 
 	if blDebug == False:
 		for sKey in dictWindow:
@@ -75,9 +75,9 @@ def setModeFuncsAndLayouts(blDebug):
 
 	dictProc = createDictProc()
 	dictProc = updateDictProc_Kura2(dictProc)
-	dictProc = updateDictProc_Clear(dictProc)
-	dictProc = updateDictProc_End(dictProc)
-	dictProc = updateDictProc_Survey(dictProc)
+	# dictProc = updateDictProc_Clear(dictProc)
+	# dictProc = updateDictProc_End(dictProc)
+	# dictProc = updateDictProc_Survey(dictProc)
 
 	listFlag = getDictFlag()
 

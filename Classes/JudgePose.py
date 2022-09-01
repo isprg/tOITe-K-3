@@ -106,9 +106,6 @@ def judge_pose(vLandmarks, vPoints, correctAngle, sJudgeMargin):
 	# currentAngles = makeListOfAngles(vLandmarks, vPoints)
 	#print(currentAngles[0],currentAngles[1],currentAngles[4],currentAngles[5])
 	#print(vLandmarks[26],vLandmarks[25])
-	print(vPoints)
-	print(len(vPoints))
-
 	flag = False
 	# for i in range(0, 8):
 	# 	if i in (2, 3, 6, 7):

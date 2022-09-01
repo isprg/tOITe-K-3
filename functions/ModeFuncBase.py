@@ -73,10 +73,10 @@ def select_game_ModeProc(dictArgument):
 	cState = dictArgument["State"]
 
 	if event == "くらわんか船1":
-		sStartTime = cState.updateState("KURAWANKA1_Q")
+		sStartTime = cState.updateState("KURA1_Q")
 		dictArgument["Start time"] = sStartTime
 	elif event == "くらわんか船2":
-		sStartTime = cState.updateState("KURAWANKA2_Q")
+		sStartTime = cState.updateState("KURA2_Q")
 		dictArgument["Start time"] = sStartTime
 
 

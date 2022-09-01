@@ -19,9 +19,9 @@ def updateDictProc_Kura2(dictProc):
 
 # レイアウト設定・辞書割り当て =============================================
 def updateDictWindow_Kura2(dictWindow):
-	layoutKura2_Q = make_fullimage_layout('png/lab_q.png',"KURA2_Q")
-	layoutKura2_Correct = make_fullimage_layout('png/lab_a.png',"KURA2_CORRECT")
-	layoutKura2_Clear = make_fullimage_layout('png/lab_i.png', "KURA2_CLEAR")
+	layoutKura2_Q = make_fullimage_layout('png/sample.png',"KURA2_Q")
+	layoutKura2_Correct = make_fullimage_layout('png/sample.png',"KURA2_CORRECT")
+	layoutKura2_Clear = make_fullimage_layout('png/sample.png', "KURA2_CLEAR")
 
 	dictLayout = {
 		"KURA2_Q"			: layoutKura2_Q,
@@ -115,6 +115,3 @@ def procKura2_clear(dictArgument):
 			sStartTime = cState.updateState("SELECT_GAME")
 
 			dictArgument["Start time"] = sStartTime
-
-			# # ラボをクリアしたのでプレイできないように設定
-			cState.dictWindow["SELECT_GAME"]["くらわんか船2"].update(disabled=True)
