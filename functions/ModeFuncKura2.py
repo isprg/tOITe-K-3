@@ -10,7 +10,7 @@ from functions.ModeFuncBase import getDefaultAreaDefinition
 def updateDictProc_Kura2(dictProc):
 	dictProc_this = {
 		"KURA2_Q"			: procKura2_Q,
-		"KURA2_MOVIE_PROC"	: procKura2_Movie,
+		# "KURA2_MOVIE_PROC"	: procKura2_Movie,
 		"KURA2_POSE_PROC"	: procKura2_ImageProc,
 		"KURA2_CORRECT"      : procKura2_correct,
 		"KURA2_CLEAR"        : procKura2_clear
@@ -25,7 +25,7 @@ def updateDictWindow_Kura2(dictWindow):
 
 	dictLayout = {
 		"KURA2_Q"			: layoutKura2_Q,
-		"KURA2_MOVIE_PROC"	: 'None',
+		# "KURA2_MOVIE_PROC"	: 'None',
 		"KURA2_POSE_PROC"	: 'None',
 		"KURA2_CORRECT"      : layoutKura2_Correct,
 		"KURA2_CLEAR"        : layoutKura2_Clear
@@ -39,19 +39,21 @@ def procKura2_Q(dictArgument):
 	cState = dictArgument["State"]
 
 	if event == "KURA2_Q":
-		sStartTime = cState.updateState("KURA2_POSE_PROC")
-		dictArgument["Start time"] = sStartTime
+		vPosition = pyautogui.position()
+		listArea = getDefaultAreaDefinition()
+		sTappedArea = CheckTappedArea(vPosition, listArea)
+
+		if sTappedArea == 0:  # 次へをタップ
+			sStartTime = cState.updateState("KURA2_POSE_PROC")
+			dictArgument["Start time"] = sStartTime
 
 def procKura2_Movie(dictArgument):
 	event = dictArgument["Event"]
 	cState = dictArgument["State"]
-	proc = dictArgument["ImageProc"]
 
 	# if os.name != 'nt':
 	# 	result = subprocess.call(['mplayer', '-fs', './suitoOsaka_ver4.mp4'])
 
-	proc.createWindows()
-	proc.defineCorrectPose()
 	sStartTime = cState.updateState("KURA2_POSE_PROC")
 	dictArgument["Start time"] = sStartTime
 
@@ -61,26 +63,30 @@ def procKura2_ImageProc(dictArgument):
 	cCtrlCard = dictArgument["CtrlCard"]
 	proc = dictArgument["ImageProc"]
 
-	if event == "KURA2_Q":
-		vPosition = pyautogui.position()
-		listArea = getDefaultAreaDefinition()
-		sTappedArea = CheckTappedArea(vPosition, listArea)
+	# if event == "KURA2_POSE_PROC":
+	# vPosition = pyautogui.position()
+	# listArea = getDefaultAreaDefinition()
+	# sTappedArea = CheckTappedArea(vPosition, listArea)
 
-		if sTappedArea == 0:
-			isFound = proc.execute()
-			cv2.waitKey(1)
+	# proc.createWindows()
 
-			print("isFound",isFound)
+	# if sTappedArea == 0:
+		# isFound = proc.execute()
+		# cv2.waitKey(1)
+	proc.createWindows()
+	isFound = proc.execute()
+	cv2.waitKey(1)
 
-			if isFound is True:
-				PlaySound("sound/correct.wav")
+	print("isFound",isFound)
 
-				cCtrlCard.write_result("pose", "T")
+	if isFound is True:
+		PlaySound("sound/correct.wav")
 
-				sStartTime = cState.updateState("KURA2_CORRECT")
-				dictArgument["Start time"] = sStartTime
+		cCtrlCard.write_result("pose", "T")
 
-				proc.closeWindows()
+		sStartTime = cState.updateState("KURA2_CORRECT")
+		dictArgument["Start time"] = sStartTime
+		proc.closeWindows()
 
 def procKura2_correct(dictArgument):
 	event = dictArgument["Event"]

@@ -52,7 +52,7 @@ class ClsImageProcessPose(ClsImageProcess):
 		#			for landmark in vLandmark]
 		#self.correctAngles = makeListOfAngles(vLandmark, vPoints)
 		self.correctAngle = 20
-		print(self.correctAngle)
+		# print(self.correctAngle)
 
 	def defineROI(self, img):
 		width = int(img.shape[1] * self.ratioROI)
@@ -72,6 +72,7 @@ class ClsImageProcessPose(ClsImageProcess):
 		#	min_tracking_confidence=0.5)
 
 	def process(self):
+		self.defineCorrectPose("")
 		if self.isROIdefined == False:
 			self.defineROI(self.imSensor)
 		imROI = self.imSensor[:, self.leftPosROI:self.rightPosROI]
