@@ -10,30 +10,33 @@ def SetGame_FromCard(dictArgument):
 
 	# 全問正解の場合
 	if dictSaveData is not None and dictSaveData["complete"] == "T":
-		print("game complete")
+		print("already clear game")
+		# if dictSaveData["finish_survey"] == "T":
+		# 	# アンケート回答済みの場合
+		# 	sStartTime = cState.updateState("END_C")
+		# else:
+		# 	sStartTime = cState.updateState("CLEAR2")
+
+		dictArgument["Start time"] = sStartTime
 
 	# チュートリアルをやってない場合
 	elif dictSaveData is None or dictSaveData["tutorial"] != "T":
 		sStartTime = cState.updateState("GO_TUTORIAL")
 		dictArgument["Start time"] = sStartTime
 
-	# みなっぱをクリアしている場合
-	elif dictSaveData["minappa"] == "T":
-		cState.dictWindow["SELECT_GAME"]["くらわんか舟１"].update(disabled=True)
-
-	# ポーズをクリアしている場合
-	elif dictSaveData["pose"] == "T":
-			cState.dictWindow["SELECT_GAME"]["くらわんか舟２"].update(disabled=True)
-
-	elif dictSaveData["complete"] == "T":
-			cState.dictWindow["SELECT_GAME"]["電話"].update(disabled=True)
-
-	else:
-		# カードを初期化
-		print("InitCard")
-		cCtrlCard.initCard()
+	# チュートリアルをクリアしている場合
+	elif dictSaveData is not None and dictSaveData["tutorial"] == "T":
+		print("already clear tutorial")
 		sStartTime = cState.updateState("SELECT_GAME")
 		dictArgument["Start time"] = sStartTime
+
+		# みなっぱをすべてクリアしている場合
+		if dictSaveData["minappa"] == "T":
+			cState.dictWindow["SELECT_GAME"]["くらわんか船1"].update(disabled=True)
+
+		# ポーズ推定をすべてクリアしている場合
+		if dictSaveData["pose"] == "T":
+			cState.dictWindow["SELECT_GAME"]["くらわんか船2"].update(disabled=True)
 
 
 # カードの状態をチェック

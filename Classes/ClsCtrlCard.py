@@ -2,16 +2,16 @@ from Classes.ClsCardIF import ClsCardIF
 
 
 class ClsCtrlCard:
-	def __init__(self, Prob_List):
+	def __init__(self, dictFlag):
 		self.ClsCardIF = ClsCardIF()
 
 		self.ClsCardIF.open()
 		self.CurrentID = None
 
 		# 記録と問題名の対応を表すテーブル
-		self.dictRecord_Table = {}
-		for key in Prob_List:
-			self.dictRecord_Table[key] = "0"
+		self.dictFlagRecord = {}
+		for key in dictFlag:
+			self.dictFlagRecord[key] = "0"
 
 	def Finalize(self):
 		self.ClsCardIF.close()
@@ -26,8 +26,8 @@ class ClsCtrlCard:
 			return True
 
 	def reset_record_table(self):
-		for key in self.dictRecord_Table.keys():
-			self.dictRecord_Table[key] = "0"
+		for key in self.dictFlagRecord.keys():
+			self.dictFlagRecord[key] = "0"
 
 	def initCard(self):
 		bSuccess = self.ClsCardIF.initTag(force=True)
@@ -49,21 +49,21 @@ class ClsCtrlCard:
 	def getID(self):
 		return self.CurrentID
 
-	def write_result(self, strProb_Name, strAns):
-		if strProb_Name not in self.dictRecord_Table:
+	def write_result(self, strFlagName, strAns):
+		if strFlagName not in self.dictFlagRecord:
 			return False
 
-		sNumOfProb = list(self.dictRecord_Table.keys()).index(
-			strProb_Name
+		sNumOfFlags = list(self.dictFlagRecord.keys()).index(
+			strFlagName
 		)  # 問題名から対応する番号を取得
-		bSuccess = self.ClsCardIF.writeAnswer(sNumOfProb, strAns)  # カードに書き込み
+		bSuccess = self.ClsCardIF.writeAnswer(sNumOfFlags, strAns)  # カードに書き込み
 
 		# 書き込み失敗時に1度はリトライする
 		if not bSuccess:
 			bSuccess = self.retry_to_write()
 
 		if bSuccess:
-			self.dictRecord_Table[strProb_Name] = strAns
+			self.dictFlagRecord[strFlagName] = strAns
 
 		return bSuccess
 
@@ -73,8 +73,8 @@ class ClsCtrlCard:
 		self.ClsCardIF.initTag(force=True)
 
 		bSuccess = True
-		for sNumOfProb, strAns in enumerate(self.dictRecord_Table.values()):
-			if not self.ClsCardIF.writeAnswer(sNumOfProb, strAns):
+		for sNumOfFlags, strAns in enumerate(self.dictFlagRecord.values()):
+			if not self.ClsCardIF.writeAnswer(sNumOfFlags, strAns):
 				bSuccess = False
 
 		return bSuccess
@@ -91,11 +91,11 @@ class ClsCtrlCard:
 			if record is None:
 				self.reset_record_table()
 		else:
-			for i, key in enumerate(self.dictRecord_Table.keys()):
-				self.dictRecord_Table[key] = record[i]
+			for i, key in enumerate(self.dictFlagRecord.keys()):
+				self.dictFlagRecord[key] = record[i]
 
 	def read_result(self):
-		return self.dictRecord_Table.copy()
+		return self.dictFlagRecord.copy()
 
 	def check_exist(self):
 		if self.ClsCardIF.sense() is None:

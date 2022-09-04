@@ -1,31 +1,24 @@
 # ライブラリ等のインポート ==============================================
-from time import sleep
-import PySimpleGUI as sg
 import pyautogui
 import yaml
 import os
 
 from functions.ModeFuncBase import *
-from functions.ModeFuncKura2 import *
-# from functions.ModeFuncClear import *
-# from functions.ModeFuncEnd import *
-# from functions.ModeFuncSurvey import *
+from functions.ModeFuncMinappa import *
+from functions.ModeFuncPose import *
 from functions.CardFunc import *
 from functions.common import getDictFlag
-
 from Classes.ClsCtrlStateAndWindow import ClsCtrlStateAndWindow
 
 if os.name == 'nt':
-	from Classes.ClsCtrlCardDummy1FClear import ClsCtrlCard
+	from Classes.ClsCtrlCardDummy import ClsCtrlCard
 else:
 	from Classes.ClsCtrlCard import ClsCtrlCard
 	from functions.AdminMode import AdminMode
 
 import sys
 sys.path.append("./Classes")
-# from ClsImageProcessPose import ClsImageProcessPose
-from Classes.ClsImageProcessPose import ClsImageProcessPose
-
+from ClsImageProcessPose import ClsImageProcessPose
 
 
 # 環境設定 =============================================================
@@ -60,10 +53,8 @@ def setEnvironment():
 # モード別設定 =============================================================
 def setModeFuncsAndLayouts(blDebug):
 	dictWindow = createDictWindow()
-	dictWindow = updateDictWindow_Kura2(dictWindow)
-	# dictWindow = updateDictWindow_Clear(dictWindow)
-	# dictWindow = updateDictWindow_End(dictWindow)
-	# dictWindow = updateDictWindow_Survey(dictWindow)
+	dictWindow = updateDictWindow_Minappa(dictWindow)
+	dictWindow = updateDictWindow_Pose(dictWindow)
 
 	if blDebug == False:
 		for sKey in dictWindow:
@@ -74,14 +65,12 @@ def setModeFuncsAndLayouts(blDebug):
 	cState = ClsCtrlStateAndWindow("STANDBY", "BACKGROUND", dictWindow)
 
 	dictProc = createDictProc()
-	dictProc = updateDictProc_Kura2(dictProc)
-	# dictProc = updateDictProc_Clear(dictProc)
-	# dictProc = updateDictProc_End(dictProc)
-	# dictProc = updateDictProc_Survey(dictProc)
+	dictProc = updateDictProc_Minappa(dictProc)
+	dictProc = updateDictProc_Pose(dictProc)
 
-	listFlag = getDictFlag()
+	dictFlag = getDictFlag()
 
-	return cState, dictProc, listFlag
+	return cState, dictProc, dictFlag
 
 
 # メインスレッド =======================================================
@@ -93,23 +82,24 @@ def mainThread():
 
 	listFlags = list(dictFlag.keys())
 	print(listFlags[0])
+	
 
 	# 管理者カードの一覧を取得
 	with open("files/Admin_CardID_list.yaml", "r") as f:
 		card_ID_list = yaml.safe_load(f)["card_ID"]
 
-		dictArgument = {
-			"State"			: cState,
-			"CtrlCard"		: cCtrlCard,
-			"ImageProc"		: proc,
-			"Event"			: None,
-			"Values"		: None,
-			"Frame"			: 0,
-			"Start time"	: 0,
-			"Return state"	: None,  # カードエラーからの復帰位置
-			"Option"		: 0,
-			"Complete"		: 0,
-		}
+	dictArgument = {
+		"State"			: cState,
+		"CtrlCard"		: cCtrlCard,
+		"ImageProc"		: proc,
+		"Event"			: None,
+		"Values"		: None,
+		"Frame"			: 0,
+		"Start time"	: 0,
+		"Return state"	: None,  # カードエラーからの復帰位置
+		"Option"		: [0, 0, 0, 0, 0],
+		"Complete"		: 0,
+	}
 
 	# 無限ループ ----------------------------------------
 	while True:
@@ -127,7 +117,7 @@ def mainThread():
 			event, values = cState.readEvent()
 			dictArgument["Event"] = event
 			dictArgument["Values"] = values
-
+			
 			if event != "-timeout-":
 				print(event)
 
@@ -158,7 +148,7 @@ def mainThread():
 if __name__ == "__main__":
 	while True:
 		Admin_CardID = mainThread()
-		# adminCommand = AdminMode(Admin_CardID)
+		#adminCommand = AdminMode(Admin_CardID)
 
 		if os.name == 'nt':
 			adminCommand = "end"

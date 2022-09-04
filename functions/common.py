@@ -55,9 +55,11 @@ def CheckComplete(cCtrlCard):
 
 
 def PlaySound(path):
-	if os.name != 'nt':
-		subprocess.Popen(["aplay", "--quiet", path])
-	print('play sound')
+    if os.name != 'nt':
+        subprocess.Popen(["aplay", "--quiet", path])
+    else:
+        subprocess.Popen(
+            ["powershell", "-c", f"(New-Object Media.SoundPlayer '{path}').PlaySync();"])
 
 
 def CheckTappedArea(vPosition, listArea):
@@ -68,9 +70,10 @@ def CheckTappedArea(vPosition, listArea):
 		sMinY = listArea[sAreaNumber][1]
 		sMaxY = listArea[sAreaNumber][1] + listArea[sAreaNumber][3]
 
-		if(vPosition.x > sMinX and vPosition.x < sMaxX
+		if(vPosition.x > sMinX and vPosition.x < sMaxX 
 		and vPosition.y > sMinY and vPosition.y < sMaxY):
 			sTappedArea = sAreaNumber
 			break
 
 	return sTappedArea
+			

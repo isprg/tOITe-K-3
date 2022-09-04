@@ -69,7 +69,7 @@ def MakeEditWindow(dictFlag):
 			sg.Button("終了", key="end"),
 		],
 	]
-
+	
 	listFlagKeys = list(dictFlag.keys())
 	listFlagValues = list(dictFlag.values())
 
@@ -96,6 +96,9 @@ def MakeEditWindow(dictFlag):
 					[sg.Checkbox(listFlagValues[1], key=listFlagKeys[1])],
 					[sg.Checkbox(listFlagValues[2], key=listFlagKeys[2])],
 					[sg.Checkbox(listFlagValues[3], key=listFlagKeys[3])],
+					[sg.Checkbox(listFlagValues[4], key=listFlagKeys[4])],
+					[sg.Checkbox(listFlagValues[5], key=listFlagKeys[5])],
+					[sg.Checkbox(listFlagValues[6], key=listFlagKeys[6])],
 				],
 				pad=((300, 0), (0, 0)),
 			)
@@ -142,7 +145,7 @@ def MakeRegisterAdminWindow(strText):
 		[sg.Text("管理者カードの登録を削除するには，上のテキストボックスから直接IDを削除してください．", font=("", 15))],
 		[sg.Button("登録", key="register"), sg.Button("終了", key="end")],
 	]
-
+	
 	window = sg.Window(
 		"RegisterWindow",
 		layout,

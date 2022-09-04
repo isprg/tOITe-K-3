@@ -1,8 +1,9 @@
 import time
 import PySimpleGUI as sg
+import pyautogui
 
 from functions.setGUI import setGUI
-from functions.common import Reset_Game, PlaySound
+from functions.common import Reset_Game, PlaySound, CheckTappedArea
 from functions.CardFunc import SetGame_FromCard
 from functions.DesignLayout import *
 
@@ -10,7 +11,7 @@ from functions.DesignLayout import *
 # 処理の辞書割り当て ======================================================
 def createDictProc():
 	dictProc = {
-		"STANDBY"				: standbyModeProc,
+		"STANDBY"			: standbyModeProc,
 		"SELECT_GAME"		: select_game_ModeProc,
 		"CARD_ERROR"		: card_error_ModeProc,
 		"GO_TUTORIAL"	: go_tutorial_ModeProc,
@@ -21,29 +22,22 @@ def createDictProc():
 # レイアウト設定・辞書割り当て =============================================
 def createDictWindow():
 	layoutBackGround = [[sg.Text()]]
-	layoutStandby = make_fullimage_layout("png/standby01.png", "STANDBY")
-	layoutSelect_Game = make_4choice_layout("png/select01.png", ["", "くらわんか船1", "くらわんか船2", ""])
-	layoutGo_Tutorial = make_fullimage_layout("png/ending.png", "GO_TUTORIAL")
-	layoutCard_Error = make_fullimage_layout("png/card_alert.png", "CARD_ERROR")
-
+	layoutStandby = make_fullimage_layout("images/standby01.png", "STANDBY")
+	layoutSelect_Game = make_4choice_layout("images/select01.png", ["くらわんか舟１", "くらわんか舟２", "" , ""])
+	layoutCard_Error = make_fullimage_layout("images/card_alert.png", "CARD_ERROR")
+	layoutGo_Tutorial = make_fullimage_layout("images/go_tutorial.png", "GO_TUTORIAL")
 
 	dictLayout = {
-		"BACKGROUND"    : layoutBackGround,
+		"BACKGROUND"  : layoutBackGround,
 		"STANDBY"     : layoutStandby,
-		"SELECT_GAME"   : layoutSelect_Game,
+		"SELECT_GAME" : layoutSelect_Game,
+		"CARD_ERROR"  : layoutCard_Error,
 		"GO_TUTORIAL": layoutGo_Tutorial,
-		"CARD_ERROR"    : layoutCard_Error
-	}
+    }
 	dictWindow = setGUI(dictLayout)
 
 	return dictWindow
 
-# 標準タップ座標設定 ================================================
-def getDefaultAreaDefinition():
-    vArea0 = [260, 520, 520, 60]
-    listArea = [vArea0, ]
-
-    return listArea
 
 # STANDBYモード処理 ======================================================
 def standbyModeProc(dictArgument):
@@ -55,20 +49,24 @@ def standbyModeProc(dictArgument):
 	if setFlag:
 		PlaySound("sound/card_set.wav")
 		SetGame_FromCard(dictArgument)
-		# sStartTime = cState.updateState("SELECT_GAME")
-		# dictArgument["Start time"] = sStartTime
+		sStartTime = cState.updateState("SELECT_GAME")
+		dictArgument["Start time"] = sStartTime
 
 
 # SELECT_GAMEモード処理 =================================================
 def select_game_ModeProc(dictArgument):
 	event = dictArgument["Event"]
 	cState = dictArgument["State"]
+	proc = dictArgument["ImageProc"]
 
-	if event == "くらわんか船1":
-		sStartTime = cState.updateState("KURA1_Q")
+	cCtrlCard = dictArgument["CtrlCard"]
+	dictSaveData = cCtrlCard.read_result()
+
+	if event == "くらわんか舟１":
+		sStartTime = cState.updateState("MINAPPA_Q1")
 		dictArgument["Start time"] = sStartTime
-	elif event == "くらわんか船2":
-		sStartTime = cState.updateState("KURA2_Q")
+	elif event == "くらわんか舟２":
+		sStartTime = cState.updateState("POSE_Q")
 		dictArgument["Start time"] = sStartTime
 
 
@@ -83,20 +81,17 @@ def card_error_ModeProc(dictArgument):
 	if exist is True and identical is True:
 		ReturnState, ImageProc_Flag = dictArgument["Return state"]
 
-		# if ImageProc_Flag:
-		# 	proc.createWindows()
+		if ImageProc_Flag:
+			proc.createWindows()
 
 		sStartTime = cState.updateState(ReturnState)
 		dictArgument["Return state"] = None
-		# sStartTime = cState.updateState("STANDBY")
 		dictArgument["Start time"] = sStartTime
-		# Reset_Game(dictArgument)
 
 	elif identical is False or time.time() - dictArgument["Start time"] > 10:
 		Reset_Game(dictArgument)
 
-
 # go_tutorialモード処理 ======================================================
 def go_tutorial_ModeProc(dictArgument):
-    if time.time() - dictArgument["Start time"] > 10:
-        Reset_Game(dictArgument)
+	if time.time() - dictArgument["Start time"] > 10:
+		Reset_Game(dictArgument)
