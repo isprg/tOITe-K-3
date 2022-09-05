@@ -181,4 +181,3 @@ def procMinappa_Clear(dictArgument):
 			dictArgument["Start time"] = sStartTime
 			cState.dictWindow["SELECT_GAME"]["くらわんか舟１"].update(disabled=True)
 			cCtrlCard.write_result("minappa", "T")
-

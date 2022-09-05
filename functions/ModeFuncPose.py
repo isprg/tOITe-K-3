@@ -20,9 +20,9 @@ def updateDictProc_Pose(dictProc):
 
 # レイアウト設定・辞書割り当て =============================================
 def updateDictWindow_Pose(dictWindow):
-	layoutPose_Q = make_fullimage_layout("images/kurawanka2_01.png", "POSE_Q")
-	layoutPose_Correct = make_fullimage_layout("images/kurawanka2_02.png", "POSE_CORRECT")
-	layoutPose_Clear = make_fullimage_layout("images/kurawanka2_03.png", "POSE_CLEAR")
+	layoutPose_Q = make_fullimage_layout("images/kurawanka2_quetion.png", "POSE_Q")
+	layoutPose_Correct = make_fullimage_layout("images/kurawanka2_answer.png", "POSE_CORRECT")
+	layoutPose_Clear = make_fullimage_layout("images/kurawanka2_clear.png", "POSE_CLEAR")
 
 	dictLayout = {
 		"POSE_Q"			: layoutPose_Q,
@@ -53,7 +53,7 @@ def procPose_Q(dictArgument):
 
 		if sTappedArea == 0:  # 次へをタップ
 			proc.createWindows()
-			proc.defineCorrectPose("result_pose/guriko_pose.jpg")
+			proc.defineCorrectPose("")
 			sStartTime = cState.updateState("POSE_PROC")
 			dictArgument["Start time"] = sStartTime
 
@@ -74,19 +74,20 @@ def procPose_ImageProc(dictArgument):
 
 	if isFound is True:
 		PlaySound("sound/correct.wav")
-		cCtrlCard.write_result("pose", "T")
 		sStartTime = cState.updateState("POSE_CORRECT")
 		dictArgument["Start time"] = sStartTime
+		# print(dictArgument["Event"])
 
-		proc.closeWindows()
+		proc.Finalize()
 
 
 # labo_correctモード処理　======================================================
 def procPose_correct(dictArgument):
 	event = dictArgument["Event"]
 	cState = dictArgument["State"]
-	cCtrlCard = dictArgument["CtrlCard"]
+	# cCtrlCard = dictArgument["CtrlCard"]
 
+	# print(event)
 	if event == "POSE_CORRECT":
 		vPosition = pyautogui.position()
 		listArea = getDefaultAreaDefinition()
@@ -111,4 +112,5 @@ def procPose_clear(dictArgument):
 		if sTappedArea == 0:
 			sStartTime = cState.updateState("SELECT_GAME")
 			dictArgument["Start time"] = sStartTime
+			cCtrlCard.write_result("pose", "T")
 			cState.dictWindow["SELECT_GAME"]["くらわんか舟２"].update(disabled=True)
