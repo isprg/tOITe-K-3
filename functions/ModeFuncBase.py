@@ -93,5 +93,8 @@ def card_error_ModeProc(dictArgument):
 
 # go_tutorialモード処理 ======================================================
 def go_tutorial_ModeProc(dictArgument):
-	if time.time() - dictArgument["Start time"] > 10:
+	event = dictArgument["Event"]
+	cState = dictArgument["State"]
+
+	if event == "GO_TUTORIAL":
 		Reset_Game(dictArgument)
