@@ -48,10 +48,9 @@ def standbyModeProc(dictArgument):
 
 	if setFlag:
 		PlaySound("sound/card_set.wav")
+		sStartTime = cState.updateState("SELECT_GAME")
+		dictArgument["Start time"] = sStartTime
 		SetGame_FromCard(dictArgument)
-		# sStartTime = cState.updateState("SELECT_GAME")
-		# dictArgument["Start time"] = sStartTime
-		# SetGame_FromCard(dictArgument)
 
 
 # SELECT_GAMEモード処理 =================================================
