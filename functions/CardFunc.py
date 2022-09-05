@@ -5,6 +5,9 @@ def SetGame_FromCard(dictArgument):
 	cCtrlCard = dictArgument["CtrlCard"]
 	cState = dictArgument["State"]
 
+	cState.dictWindow["SELECT_GAME"]["くらわんか舟１"].update(disabled=False)
+	cState.dictWindow["SELECT_GAME"]["くらわんか舟２"].update(disabled=False)
+
 	dictSaveData = cCtrlCard.read_result()
 	print("Save Data:", dictSaveData)
 
