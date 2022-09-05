@@ -10,6 +10,8 @@ def SetGame_FromCard(dictArgument):
 
 	# 全問正解の場合
 	if dictSaveData is not None and dictSaveData["complete"] == "T":
+		cState.dictWindow["SELECT_GAME"]["くらわんか舟１"].update(disabled=True)
+		cState.dictWindow["SELECT_GAME"]["くらわんか舟２"].update(disabled=True)
 		print("game complete")
 
 	# チュートリアルをやってない場合
