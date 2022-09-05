@@ -9,11 +9,11 @@ def SetGame_FromCard(dictArgument):
 	print("Save Data:", dictSaveData)
 
 	# 全問正解の場合
-	if dictSaveData is None or dictSaveData["complete"] == "T":
+	if dictSaveData is not None and dictSaveData["complete"] == "T":
 		print("game complete")
 
 	# チュートリアルをやってない場合
-	elif dictSaveData is None or dictSaveData["tutorial"] != "T":
+	elif dictSaveData["tutorial"] != "T":
 		sStartTime = cState.updateState("GO_TUTORIAL")
 		dictArgument["Start time"] = sStartTime
 
