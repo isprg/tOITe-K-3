@@ -22,8 +22,8 @@ def createDictProc():
 # レイアウト設定・辞書割り当て =============================================
 def createDictWindow():
 	layoutBackGround = [[sg.Text()]]
-	layoutStandby = make_fullimage_layout("images/standby01.png", "STANDBY")
-	layoutSelect_Game = make_4choice_layout("images/select01.png", ["くらわんか舟１", "くらわんか舟２", "" , ""])
+	layoutStandby = make_fullimage_layout("images/standby.png", "STANDBY")
+	layoutSelect_Game = make_4choice_layout("images/select.png", ["くらわんか舟１", "くらわんか舟２", "" , ""])
 	layoutCard_Error = make_fullimage_layout("images/card_alert.png", "CARD_ERROR")
 	layoutGo_Tutorial = make_fullimage_layout("images/go_tutorial.png", "GO_TUTORIAL")
 

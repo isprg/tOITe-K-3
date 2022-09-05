@@ -20,12 +20,12 @@ def updateDictProc_Minappa(dictProc):
 
 # レイアウト設定・辞書割り当て =============================================
 def updateDictWindow_Minappa(dictWindow):
-	layoutMinappa_Q1 = make_fullimage_layout("images/kurawanka1-01.png", "MINAPPA_Q1")
+	layoutMinappa_Q1 = make_fullimage_layout("images/kurawanka1_quetion.png", "MINAPPA_Q1")
 	layoutMinappa_Q2 = make_fullimage_layout("images/kurawanka1-02.png", "MINAPPA_Q2")
-	layoutMinappa_Correct1 = make_fullimage_layout("images/kurawanka1-03.png", "MINAPPA_CORRECT1")
-	layoutMinappa_Correct2 = make_fullimage_layout("images/kurawanka1-04.png", "MINAPPA_CORRECT2")
-	layoutMinappa_Correct3 = make_fullimage_layout("images/kurawanka1-05.png", "MINAPPA_CORRECT3")
-	layoutMinappa_Clear = make_fullimage_layout("images/kurawanka1-06.png", "MINAPPA_CLEAR")
+	layoutMinappa_Correct1 = make_fullimage_layout("images/kurawanka1_answer1.png", "MINAPPA_CORRECT1")
+	layoutMinappa_Correct2 = make_fullimage_layout("images/kurawanka1_answer2.png", "MINAPPA_CORRECT2")
+	layoutMinappa_Correct3 = make_fullimage_layout("images/kurawanka1_answer3.png", "MINAPPA_CORRECT3")
+	layoutMinappa_Clear = make_fullimage_layout("images/kurawanka1_clear.png", "MINAPPA_CLEAR")
 
 	dictLayout = {
 		"MINAPPA_Q1"		: layoutMinappa_Q1,
