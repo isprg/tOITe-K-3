@@ -9,7 +9,7 @@ def SetGame_FromCard(dictArgument):
 	print("Save Data:", dictSaveData)
 
 	# 全問正解の場合
-	if dictSaveData is not None and dictSaveData["complete"] == "T":
+	if dictSaveData is None or dictSaveData["complete"] == "T":
 		print("game complete")
 
 	# チュートリアルをやってない場合
