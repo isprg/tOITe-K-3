@@ -82,7 +82,7 @@ def mainThread():
 
 	listFlags = list(dictFlag.keys())
 	print(listFlags[0])
-	
+
 
 	# 管理者カードの一覧を取得
 	with open("files/Admin_CardID_list.yaml", "r") as f:
@@ -117,7 +117,7 @@ def mainThread():
 			event, values = cState.readEvent()
 			dictArgument["Event"] = event
 			dictArgument["Values"] = values
-			
+
 			if event != "-timeout-":
 				print(event)
 
@@ -148,7 +148,7 @@ def mainThread():
 if __name__ == "__main__":
 	while True:
 		Admin_CardID = mainThread()
-		#adminCommand = AdminMode(Admin_CardID)
+		adminCommand = AdminMode(Admin_CardID)
 
 		if os.name == 'nt':
 			adminCommand = "end"

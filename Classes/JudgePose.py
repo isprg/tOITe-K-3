@@ -128,18 +128,23 @@ def judge_pose(vLandmarks, vPoints, correctAngle, sJudgeMargin):
 	hip_mid_y = (vPoints[24][1]+vPoints[23][1])/2
 	hip_mid_point = (hip_mid_x, hip_mid_y)
 
-	# xは腰の位置,yは肩の位置の座標
-	hipx_shouldery = (hip_mid_x, shoulder_mid_y)
+	array_left_shoulder = np.array(vPoints[11])
+	array_right_shoulder = np.array(vPoints[12])
+	a = np.linalg.norm(array_left_shoulder - array_right_shoulder)
 
-	this_angle = measureAngle([hip_mid_point, hipx_shouldery, shoulder_mid_point], [0, 1, 2])
-	if this_angle >= 180 :
-		this_angle = 360 - this_angle
-	if correctAngle - sJudgeMargin <= this_angle and this_angle <= correctAngle + sJudgeMargin:
-		flag = True
+	array_shoulder = np.array(shoulder_mid_point)
+	array_hip = np.array(hip_mid_point)
+	b = np.linalg.norm(array_shoulder - array_hip)
 
+	if a / b <= 0.5:
+		# xは腰の位置,yは肩の位置の座標
+		hipx_shouldery = (hip_mid_x, shoulder_mid_y)
 
+		this_angle = measureAngle([hip_mid_point, hipx_shouldery, shoulder_mid_point], [0, 1, 2])
+		if this_angle >= 180 :
+			this_angle = 360 - this_angle
+		if correctAngle - sJudgeMargin <= this_angle and this_angle <= correctAngle + sJudgeMargin:
+			flag = True
 
-	#if vLandmarks[26].y + 0.06 > vLandmarks[25].y:
-	#	flag = False
 
 	return flag
