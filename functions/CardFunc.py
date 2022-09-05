@@ -28,12 +28,12 @@ def SetGame_FromCard(dictArgument):
 	elif dictSaveData["complete"] == "T":
 			cState.dictWindow["SELECT_GAME"]["電話"].update(disabled=True)
 
-	else:
-		# カードを初期化
-		print("InitCard")
-		cCtrlCard.initCard()
-		sStartTime = cState.updateState("SELECT_GAME")
-		dictArgument["Start time"] = sStartTime
+	# else:
+	# 	# カードを初期化
+	# 	print("InitCard")
+	# 	cCtrlCard.initCard()
+	# 	sStartTime = cState.updateState("SELECT_GAME")
+	# 	dictArgument["Start time"] = sStartTime
 
 
 # カードの状態をチェック
