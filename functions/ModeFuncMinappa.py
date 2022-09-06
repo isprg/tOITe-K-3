@@ -3,7 +3,7 @@ from functions.setGUI import setGUI
 from functions.common import PlaySound, CheckTappedArea, CheckComplete
 from functions.DesignLayout import make_fullimage_layout
 
-listFound = [1, 0, 0]
+listFound = [0, 0, 0]
 
 # 処理の辞書割り当て ======================================================
 def updateDictProc_Minappa(dictProc):
@@ -20,12 +20,12 @@ def updateDictProc_Minappa(dictProc):
 
 # レイアウト設定・辞書割り当て =============================================
 def updateDictWindow_Minappa(dictWindow):
-	layoutMinappa_Q1 = make_fullimage_layout("images/kurawanka1_quetion.png", "MINAPPA_Q1")
-	layoutMinappa_Q2 = make_fullimage_layout("images/kurawanka1-02.png", "MINAPPA_Q2")
-	layoutMinappa_Correct1 = make_fullimage_layout("images/kurawanka1_answer1.png", "MINAPPA_CORRECT1")
-	layoutMinappa_Correct2 = make_fullimage_layout("images/kurawanka1_answer2.png", "MINAPPA_CORRECT2")
-	layoutMinappa_Correct3 = make_fullimage_layout("images/kurawanka1_answer3.png", "MINAPPA_CORRECT3")
-	layoutMinappa_Clear = make_fullimage_layout("images/kurawanka1_clear.png", "MINAPPA_CLEAR")
+	layoutMinappa_Q1 = make_fullimage_layout("images/k-3_1.png", "MINAPPA_Q1")
+	layoutMinappa_Q2 = make_fullimage_layout("images/k-3_2.png", "MINAPPA_Q2")
+	layoutMinappa_Correct1 = make_fullimage_layout("images/k-3_4.png", "MINAPPA_CORRECT1")
+	layoutMinappa_Correct2 = make_fullimage_layout("images/k-3_5.png", "MINAPPA_CORRECT2")
+	layoutMinappa_Correct3 = make_fullimage_layout("images/k-3_6.png", "MINAPPA_CORRECT3")
+	layoutMinappa_Clear = make_fullimage_layout("images/k-3_7.png", "MINAPPA_CLEAR")
 
 	dictLayout = {
 		"MINAPPA_Q1"		: layoutMinappa_Q1,
@@ -181,3 +181,4 @@ def procMinappa_Clear(dictArgument):
 			dictArgument["Start time"] = sStartTime
 			cState.dictWindow["SELECT_GAME"]["くらわんか舟１"].update(disabled=True)
 			cCtrlCard.write_result("minappa", "T")
+

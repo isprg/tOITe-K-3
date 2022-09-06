@@ -23,12 +23,12 @@ class ClsImageProcessPose(ClsImageProcess):
 			min_detection_confidence=0.5,
 			min_tracking_confidence=0.5)
 
-		imOverlayOrig_pose = cv2.imread('./images/sign_pose.png', -1)
-		# imOverlayOrig_pose = cv2.resize(imOverlayOrig_pose, dsize=(self.sWidthWindow, self.sHeightWindow))
-		self.imOverlayMask_pose = imOverlayOrig_pose[:,:,3]
-		self.imOverlayMask_pose = cv2.cvtColor(self.imOverlayMask_pose, cv2.COLOR_GRAY2BGR)
-		self.imOverlayMask_pose	 = self.imOverlayMask_pose / 255
-		self.imOverlayOrig_pose = imOverlayOrig_pose[:,:,:3]
+		# imOverlayOrig_pose = cv2.imread('./images/sign_pose.png', -1)
+		# # imOverlayOrig_pose = cv2.resize(imOverlayOrig_pose, dsize=(self.sWidthWindow, self.sHeightWindow))
+		# self.imOverlayMask_pose = imOverlayOrig_pose[:,:,3]
+		# self.imOverlayMask_pose = cv2.cvtColor(self.imOverlayMask_pose, cv2.COLOR_GRAY2BGR)
+		# self.imOverlayMask_pose	 = self.imOverlayMask_pose / 255
+		# self.imOverlayOrig_pose = imOverlayOrig_pose[:,:,:3]
 
 		imOverlayOrig_inst = cv2.imread('./images/sign_inst2_2.png', -1)
 		self.imOverlayMask_inst = imOverlayOrig_inst[:,:,3]
