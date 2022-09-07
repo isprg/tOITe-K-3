@@ -103,48 +103,47 @@ def draw_landamrks(img, points, line_pic, radius, line_color, circle_color):
 	return img_
 
 def judge_pose(vLandmarks, vPoints, correctAngle, sJudgeMargin):
-	# currentAngles = makeListOfAngles(vLandmarks, vPoints)
-	#print(currentAngles[0],currentAngles[1],currentAngles[4],currentAngles[5])
-	#print(vLandmarks[26],vLandmarks[25])
-	flag = False
-	# for i in range(0, 8):
-	# 	if i in (2, 3, 6, 7):
-	# 		continue
-	# 	if correctAngles[i] - sJudgeMargin  <= currentAngles[i] \
-	# 	and currentAngles[i] <= correctAngles[i] + sJudgeMargin:
-	# 		pass
-	# 	else:
-	# 		flag = False
+	flag = True
 
-	# 肩の中心x座標
-	shoulder_mid_x = (vPoints[12][0]+vPoints[11][0])/2
-	# y座標
-	shoulder_mid_y = (vPoints[12][1]+vPoints[11][1])/2
-	shoulder_mid_point = (shoulder_mid_x, shoulder_mid_y)
+	# 検出率が低いときフラグをおろす
+	for i in [11, 12, 23, 24]:
+		if vLandmarks[i].visibility <= 0.3:
+			flag = False
 
-	# 腰の中心x座標
-	hip_mid_x = (vPoints[24][0]+vPoints[23][0])/2
-	# y座標
-	hip_mid_y = (vPoints[24][1]+vPoints[23][1])/2
-	hip_mid_point = (hip_mid_x, hip_mid_y)
+	if flag is True:
+		# 肩の中心x座標
+		shoulder_mid_x = (vPoints[12][0]+vPoints[11][0])/2
+		# y座標
+		shoulder_mid_y = (vPoints[12][1]+vPoints[11][1])/2
+		shoulder_mid_point = (shoulder_mid_x, shoulder_mid_y)
 
-	array_left_shoulder = np.array(vPoints[11])
-	array_right_shoulder = np.array(vPoints[12])
-	a = np.linalg.norm(array_left_shoulder - array_right_shoulder)
+		# 腰の中心x座標
+		hip_mid_x = (vPoints[24][0]+vPoints[23][0])/2
+		# y座標
+		hip_mid_y = (vPoints[24][1]+vPoints[23][1])/2
+		hip_mid_point = (hip_mid_x, hip_mid_y)
 
-	array_shoulder = np.array(shoulder_mid_point)
-	array_hip = np.array(hip_mid_point)
-	b = np.linalg.norm(array_shoulder - array_hip)
+		array_left_shoulder = np.array(vPoints[11])
+		array_right_shoulder = np.array(vPoints[12])
+		a = np.linalg.norm(array_left_shoulder - array_right_shoulder)
 
-	if a / b <= 0.5:
-		# xは腰の位置,yは肩の位置の座標
-		hipx_shouldery = (hip_mid_x, shoulder_mid_y)
+		array_shoulder = np.array(shoulder_mid_point)
+		array_hip = np.array(hip_mid_point)
+		b = np.linalg.norm(array_shoulder - array_hip)
 
-		this_angle = measureAngle([hip_mid_point, hipx_shouldery, shoulder_mid_point], [0, 1, 2])
-		if this_angle >= 180 :
-			this_angle = 360 - this_angle
-		if correctAngle - sJudgeMargin <= this_angle and this_angle <= correctAngle + sJudgeMargin:
-			flag = True
+		if a / b <= 0.5:
+			# xは腰の位置,yは肩の位置の座標
+			hipx_shouldery = (hip_mid_x, shoulder_mid_y)
+
+			this_angle = measureAngle([hip_mid_point, hipx_shouldery, shoulder_mid_point], [0, 1, 2])
+			if this_angle >= 180 :
+				this_angle = 360 - this_angle
+			if correctAngle - sJudgeMargin <= this_angle and this_angle <= correctAngle + sJudgeMargin:
+				pass
+			else:
+				flag = False
+		else:
+			flag = False
 
 
 	return flag

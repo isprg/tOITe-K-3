@@ -23,14 +23,7 @@ class ClsImageProcessPose(ClsImageProcess):
 			min_detection_confidence=0.5,
 			min_tracking_confidence=0.5)
 
-		# imOverlayOrig_pose = cv2.imread('./images/sign_pose.png', -1)
-		# # imOverlayOrig_pose = cv2.resize(imOverlayOrig_pose, dsize=(self.sWidthWindow, self.sHeightWindow))
-		# self.imOverlayMask_pose = imOverlayOrig_pose[:,:,3]
-		# self.imOverlayMask_pose = cv2.cvtColor(self.imOverlayMask_pose, cv2.COLOR_GRAY2BGR)
-		# self.imOverlayMask_pose	 = self.imOverlayMask_pose / 255
-		# self.imOverlayOrig_pose = imOverlayOrig_pose[:,:,:3]
-
-		imOverlayOrig_inst = cv2.imread('./images/sign_inst2_2.png', -1)
+		imOverlayOrig_inst = cv2.imread('./images/sign_inst.png', -1)
 		self.imOverlayMask_inst = imOverlayOrig_inst[:,:,3]
 		self.imOverlayMask_inst = cv2.cvtColor(self.imOverlayMask_inst, cv2.COLOR_GRAY2BGR)
 		self.imOverlayMask_inst	 = self.imOverlayMask_inst / 255
@@ -38,7 +31,7 @@ class ClsImageProcessPose(ClsImageProcess):
 		# self.window.setEnableOverlay(True, 300, 0)
 		# self.window.setOverlayImage(self.imOverlayOrig_inst, self.imOverlayMask_inst)
 
-		imOverlayOrig_correct = cv2.imread('./images/sign_correct_cyan.png', -1)
+		imOverlayOrig_correct = cv2.imread('./images/sign_correct_cyan2.png', -1)
 		self.imOverlayMask_correct = imOverlayOrig_correct[:,:,3]
 		self.imOverlayMask_correct = cv2.cvtColor(self.imOverlayMask_correct, cv2.COLOR_GRAY2BGR)
 		self.imOverlayMask_correct	 = self.imOverlayMask_correct / 255
@@ -49,16 +42,9 @@ class ClsImageProcessPose(ClsImageProcess):
 	def setRatioROI(self, ratioROI):
 		self.ratioROI = ratioROI
 
-	def defineCorrectPose(self, strImgPath):
-		#imCorrect = cv2.imread(strImgPath)
-		#imCorrect = cv2.resize(
-		#	imCorrect, (int(imCorrect.shape[1]*0.9), int(imCorrect.shape[0]*0.9)))
-		#results = self.pose_subject.process(cv2.cvtColor(imCorrect, cv2.COLOR_BGR2RGB))
-		#vLandmark = [landmark for landmark in results.pose_landmarks.landmark]
-		#vPoints = [(landmark.x * imCorrect.shape[1], landmark.y * imCorrect.shape[0])
-		#			for landmark in vLandmark]
-		#self.correctAngles = makeListOfAngles(vLandmark, vPoints)
-		self.correctAngle = 20
+	def defineCorrectPose(self, angle=40, margin=5):
+		self.correctAngle = angle
+		self.sJudgeMargin = margin
 		# print(self.correctAngle)
 
 	def defineROI(self, img):
@@ -72,7 +58,6 @@ class ClsImageProcessPose(ClsImageProcess):
 		#self.ratioROI = 0.5
 		self.flag = False  # ポーズができたかのフラグ
 		self.flag_onstart = 0  # ポーズができた時の時間を格納する場所
-		#self.sJudgeMargin = 20
 		#self.mp_pose = mp.solutions.pose
 		#self.pose = self.mp_pose.Pose(
 		#	min_detection_confidence=0.5,
@@ -114,10 +99,10 @@ class ClsImageProcessPose(ClsImageProcess):
 				self.flag = True
 				self.flag_onstart = time.time()
 
-		# self.window.setOverlayImage(self.imOverlayOrig_pose, self.imOverlayMask_pose)
 		# クラスのポーズ判定フラグによって左上に表示する画像を変える
 		if self.flag is True:
 			self.window.setOverlayImage(self.imOverlayOrig_correct, self.imOverlayMask_correct)
+			# self.window.setOverlayImage(self.imOverlayOrig_pose, self.imOverlayMask_pose)
 			self.imProcessed = self.imSensor
 
 			# ポーズ判定で正解して３秒以上経過したらクラスのフラグをFalseにし、processの返り値をTrueにする
@@ -127,6 +112,7 @@ class ClsImageProcessPose(ClsImageProcess):
 				return True
 		else:
 			self.window.setOverlayImage(self.imOverlayOrig_inst, self.imOverlayMask_inst)
+			# self.window.setOverlayImage(self.imOverlayOrig_pose, self.imOverlayMask_pose)
 			self.imProcessed = self.imSensor
 
 

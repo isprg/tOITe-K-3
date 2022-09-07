@@ -53,7 +53,9 @@ def procPose_Q(dictArgument):
 
 		if sTappedArea == 0:  # 次へをタップ
 			proc.createWindows()
-			proc.defineCorrectPose("")
+
+			#引数angleに数値を入れることによって判定角度を変更できる（デフォルトでは40度), 引数marginに数値を入れることで判定角度からの許容角度を変更できる(デフォルトでは5)
+			proc.defineCorrectPose()
 			sStartTime = cState.updateState("POSE_PROC")
 			dictArgument["Start time"] = sStartTime
 
