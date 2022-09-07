@@ -23,7 +23,7 @@ class ClsImageProcessPose(ClsImageProcess):
 			min_detection_confidence=0.5,
 			min_tracking_confidence=0.5)
 
-		imOverlayOrig_inst = cv2.imread('./images/sign_inst.png', -1)
+		imOverlayOrig_inst = cv2.imread('./images/sign_inst3.png', -1)
 		self.imOverlayMask_inst = imOverlayOrig_inst[:,:,3]
 		self.imOverlayMask_inst = cv2.cvtColor(self.imOverlayMask_inst, cv2.COLOR_GRAY2BGR)
 		self.imOverlayMask_inst	 = self.imOverlayMask_inst / 255
@@ -31,7 +31,7 @@ class ClsImageProcessPose(ClsImageProcess):
 		# self.window.setEnableOverlay(True, 300, 0)
 		# self.window.setOverlayImage(self.imOverlayOrig_inst, self.imOverlayMask_inst)
 
-		imOverlayOrig_correct = cv2.imread('./images/sign_correct_cyan.png', -1)
+		imOverlayOrig_correct = cv2.imread('./images/sign_correct_cyan3.png', -1)
 		self.imOverlayMask_correct = imOverlayOrig_correct[:,:,3]
 		self.imOverlayMask_correct = cv2.cvtColor(self.imOverlayMask_correct, cv2.COLOR_GRAY2BGR)
 		self.imOverlayMask_correct	 = self.imOverlayMask_correct / 255
