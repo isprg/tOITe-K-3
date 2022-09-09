@@ -9,6 +9,7 @@ class ClsCtrlCard:
 		self.dictRecord_Table = {}
 		for key in Prob_List:
 			self.dictRecord_Table[key] = "0"
+		self.dictRecord_Table["tutorial"] = "T"
 
 	def Finalize(self):
 		path

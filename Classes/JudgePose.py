@@ -65,6 +65,30 @@ def measureAngle(vPoints, vPointNumbers):
 	else:
 		return 360 - degree
 
+# tuple型(pivot, edge1, edge2)
+def point2Angle(points):
+	vPivot = np.array(points[0])
+	vEdge1 = np.array(points[1])
+	vEdge2 = np.array(points[2])
+
+	vec1 = vEdge1 - vPivot
+	vec2 = vEdge2 - vPivot
+
+	# コサインの計算
+	length_vec_a = np.linalg.norm(vec1)
+	length_vec_c = np.linalg.norm(vec2)
+	inner_product = np.inner(vec1, vec2)
+	cos = inner_product / (length_vec_a * length_vec_c)
+
+	# 角度（ラジアン）の計算
+	rad = np.arccos(cos)
+
+	# 弧度法から度数法（rad ➔ 度）への変換
+	degree = np.rad2deg(rad)
+
+	return degree
+
+
 # 外積
 def vec_cross(vec1, vec2):
 	a = np.cross(vec1, vec2)
@@ -75,17 +99,23 @@ def vec_cross(vec1, vec2):
 	else:
 		return 0
 
+
+#-- Pose Landmark URL --
+# https://google.github.io/mediapipe/solutions/pose
 def draw_landamrks(img, points, line_pic, radius, line_color, circle_color):
 	img_ = img.copy()
 
+	False_point = [1,2,3,4,5,6,7,8,9,10,17,18,19,20,21,22,29,30,31,32]
 	for i, point in enumerate(points):
-		if 0 <= point[0] <= img.shape[1] and 0<= point[1] <= img.shape[0]:
-			pass
-		else:
-			continue
+		if(i in False_point): continue
 
-		if 0 <= i <= 10 or 17 <= i <= 22 or 29 <= i <= 32:
-			continue
+		if(i==0):
+			# 肩の中心x座標
+			shoulder_mid_x = (points[12][0]+points[11][0])//2
+			# y座標
+			shoulder_mid_y = (points[12][1]+points[11][1])//2
+			shoulder_mid_point = (shoulder_mid_x, shoulder_mid_y)
+			cv2.line(img_, points[0], shoulder_mid_point, color=line_color, thickness=line_pic, lineType=cv2.LINE_4)
 
 		if 11 <= i <= 14 or 23 <= i <= 26:
 			if i == 11:
@@ -103,47 +133,99 @@ def draw_landamrks(img, points, line_pic, radius, line_color, circle_color):
 	return img_
 
 def judge_pose(vLandmarks, vPoints, correctAngle, sJudgeMargin):
-	flag = True
+	# currentAngles = makeListOfAngles(vLandmarks, vPoints)
+	#print(currentAngles[0],currentAngles[1],currentAngles[4],currentAngles[5])
+	#print(vLandmarks[26],vLandmarks[25])
+	flag = False
+	# for i in range(0, 8):
+	# 	if i in (2, 3, 6, 7):
+	# 		continue
+	# 	if correctAngles[i] - sJudgeMargin  <= currentAngles[i] \
+	# 	and currentAngles[i] <= correctAngles[i] + sJudgeMargin:
+	# 		pass
+	# 	else:
+	# 		flag = False
 
-	# 検出率が低いときフラグをおろす
-	for i in [11, 12, 23, 24]:
-		if vLandmarks[i].visibility <= 0.3:
-			flag = False
+	# 肩の中心x座標
+	shoulder_mid_x = (vPoints[12][0]+vPoints[11][0])/2
+	# y座標
+	shoulder_mid_y = (vPoints[12][1]+vPoints[11][1])/2
+	shoulder_mid_point = (shoulder_mid_x, shoulder_mid_y)
 
-	if flag is True:
-		# 肩の中心x座標
-		shoulder_mid_x = (vPoints[12][0]+vPoints[11][0])/2
-		# y座標
-		shoulder_mid_y = (vPoints[12][1]+vPoints[11][1])/2
-		shoulder_mid_point = (shoulder_mid_x, shoulder_mid_y)
+	# 腰の中心x座標
+	hip_mid_x = (vPoints[24][0]+vPoints[23][0])/2
+	# y座標
+	hip_mid_y = (vPoints[24][1]+vPoints[23][1])/2
+	hip_mid_point = (hip_mid_x, hip_mid_y)
 
-		# 腰の中心x座標
-		hip_mid_x = (vPoints[24][0]+vPoints[23][0])/2
-		# y座標
-		hip_mid_y = (vPoints[24][1]+vPoints[23][1])/2
-		hip_mid_point = (hip_mid_x, hip_mid_y)
+	array_left_shoulder = np.array(vPoints[11])
+	array_right_shoulder = np.array(vPoints[12])
+	a = np.linalg.norm(array_left_shoulder - array_right_shoulder)
 
-		array_left_shoulder = np.array(vPoints[11])
-		array_right_shoulder = np.array(vPoints[12])
-		a = np.linalg.norm(array_left_shoulder - array_right_shoulder)
+	array_shoulder = np.array(shoulder_mid_point)
+	array_hip = np.array(hip_mid_point)
+	b = np.linalg.norm(array_shoulder - array_hip)
 
-		array_shoulder = np.array(shoulder_mid_point)
-		array_hip = np.array(hip_mid_point)
-		b = np.linalg.norm(array_shoulder - array_hip)
+	if a / b <= 0.5:
+		# xは腰の位置,yは肩の位置の座標
+		hipx_shouldery = (hip_mid_x, shoulder_mid_y)
 
-		if a / b <= 0.5:
-			# xは腰の位置,yは肩の位置の座標
-			hipx_shouldery = (hip_mid_x, shoulder_mid_y)
+		this_angle = measureAngle([hip_mid_point, hipx_shouldery, shoulder_mid_point], [0, 1, 2])
+		# print(this_angle)
+		if this_angle >= 180 :
+			this_angle = 360 - this_angle
+		if correctAngle - sJudgeMargin <= this_angle and this_angle <= correctAngle + sJudgeMargin:
+			flag = True
 
-			this_angle = measureAngle([hip_mid_point, hipx_shouldery, shoulder_mid_point], [0, 1, 2])
-			if this_angle >= 180 :
-				this_angle = 360 - this_angle
-			if correctAngle - sJudgeMargin <= this_angle and this_angle <= correctAngle + sJudgeMargin:
-				pass
-			else:
-				flag = False
-		else:
-			flag = False
 
+
+	# print('pos:head,',vPoints[0], 'shoulder,',vPoints[12], 'hip,',vPoints[24], '')
+	# measureAngle(,)
+	# print('pos:head,',vPoints[0], 'shoulder,',vPoints[12], 'hip,',vPoints[24])
+	
+	return flag
+
+
+def judge_pose_kagiya(vLandmarks, vPoints, correctAngle, sJudgeMargin):
+	flag = False
+
+	up_correct = [d+sJudgeMargin for d in correctAngle]
+	bottom_correct = [d-sJudgeMargin for d in correctAngle]
+
+	up_correct[2] -= 5
+	bottom_correct[2] += 5
+
+	# 肩の中心x座標
+	shoulder_mid_x = (vPoints[12][0]+vPoints[11][0])/2
+	# y座標
+	shoulder_mid_y = (vPoints[12][1]+vPoints[11][1])/2
+	shoulder_mid_point = (shoulder_mid_x, shoulder_mid_y)
+
+	# 腰の中心x座標
+	hip_mid_x = (vPoints[24][0]+vPoints[23][0])/2
+	# y座標
+	hip_mid_y = (vPoints[24][1]+vPoints[23][1])/2
+	hip_mid_point = (hip_mid_x, hip_mid_y)
+
+	head2hip_point = (shoulder_mid_x ,(vPoints[0][1]+hip_mid_y)/2)
+	vertical_point = (shoulder_mid_x,0)
+
+	vAngles = []
+
+	#-- 肩肘手先の角度 --
+	vAngles.append(point2Angle((vPoints[13], shoulder_mid_point, vPoints[15])))
+	#-- 垂直(肩x)肩頭の角度 --
+	vAngles.append(point2Angle((shoulder_mid_point, vertical_point, vPoints[0])))
+	#-- 頭垂直(肩x)腰の角度 --
+	vAngles.append(point2Angle((head2hip_point, vPoints[0], vertical_point)))
+
+	# print('angles: arm,', vAngles[0], 'up,', vAngles[1], 'body,', vAngles[2])
+
+	angleTF = [1 if (vAngles[i]<up_correct[i]) and (vAngles[i]>bottom_correct[i]) else 0 for i in range(3)]
+	# print(angleTF)
+
+	if (sum(angleTF) == 3):flag = True
 
 	return flag
+	
+	

@@ -29,12 +29,12 @@ def setEnvironment():
 		strPlatform = "JETSON"
 
 	sCameraNumber = 0
-	sSensorWidth = 640
-	sSensorHeight = 360
+	sSensorWidth = 480
+	sSensorHeight = 270
 	sMonitorWidth = 1024
 	sMonitorHeight = 600
 	tplWindowName = ("full",)
-	sFlipMode = 2
+	sFlipMode = 1
 
 	proc = ClsImageProcessPose(
 		strPlatform,
@@ -75,7 +75,7 @@ def setModeFuncsAndLayouts(blDebug):
 
 # メインスレッド =======================================================
 def mainThread():
-	blDebug = True
+	blDebug = False
 	proc = setEnvironment()
 	cState, dictProc, dictFlag = setModeFuncsAndLayouts(blDebug)
 	cCtrlCard = ClsCtrlCard(dictFlag)
@@ -97,7 +97,7 @@ def mainThread():
 		"Frame"			: 0,
 		"Start time"	: 0,
 		"Return state"	: None,  # カードエラーからの復帰位置
-		"Option"		: [0, 0, 0, 0, 0],
+		"Option"		: [0, 0, 0],
 		"Complete"		: 0,
 	}
 

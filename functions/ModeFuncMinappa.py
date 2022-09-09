@@ -3,7 +3,6 @@ from functions.setGUI import setGUI
 from functions.common import PlaySound, CheckTappedArea, CheckComplete
 from functions.DesignLayout import make_fullimage_layout
 
-listFound = [0, 0, 0]
 
 # 処理の辞書割り当て ======================================================
 def updateDictProc_Minappa(dictProc):
@@ -66,9 +65,11 @@ def procMinappa_Q1(dictArgument):
 	vPosition = pyautogui.position()
 	listArea = getDefaultAreaDefinition()
 	sTappedArea = CheckTappedArea(vPosition, listArea)
+	
 
 	if  event == "MINAPPA_Q1":
 		if sTappedArea == 0:
+			dictArgument["Option"] = [0, 0, 0]
 			sStartTime = cState.updateState("MINAPPA_Q2")
 			dictArgument["Start time"] = sStartTime
 
@@ -78,6 +79,7 @@ def procMinappa_Q2(dictArgument):
 	event = dictArgument["Event"]
 	cState = dictArgument["State"]
 	cCtrlCard = dictArgument["CtrlCard"]
+	listFound = dictArgument["Option"]
 
 	if event == "MINAPPA_Q2":
 		vPosition = pyautogui.position()
@@ -110,6 +112,7 @@ def procMinappa_Correct1(dictArgument):
 	event = dictArgument["Event"]
 	cState = dictArgument["State"]
 	cCtrlCard = dictArgument["CtrlCard"]
+	listFound = dictArgument["Option"]
 
 	if event == "MINAPPA_CORRECT1":
 		vPosition = pyautogui.position()
@@ -130,6 +133,7 @@ def procMinappa_Correct2(dictArgument):
 	event = dictArgument["Event"]
 	cState = dictArgument["State"]
 	cCtrlCard = dictArgument["CtrlCard"]
+	listFound = dictArgument["Option"]
 
 	if event == "MINAPPA_CORRECT2":
 		vPosition = pyautogui.position()
@@ -150,6 +154,7 @@ def procMinappa_Correct3(dictArgument):
 	event = dictArgument["Event"]
 	cState = dictArgument["State"]
 	cCtrlCard = dictArgument["CtrlCard"]
+	listFound = dictArgument["Option"]
 
 	if event == "MINAPPA_CORRECT3":
 		vPosition = pyautogui.position()
